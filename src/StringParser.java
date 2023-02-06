@@ -1,12 +1,14 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringParser {
 
-    public static void initiateShopping () throws FileNotFoundException {
+    public static void initiateShopping () throws IOException {
 
         Person p = new Person(null, null);
 
@@ -28,7 +30,7 @@ public class StringParser {
             customerVehicle = bike;
         }
 
-        File customerNames = new File("C:\\Users\\Programmer\\IdeaProjects\\Write_read_regex_exercise\\src\\Customer_names.txt");
+        File customerNames = new File("src\\Customer_names.txt");
         Scanner scannerFromFile = new Scanner(customerNames);
 
         while (scannerFromFile.hasNext()) {
@@ -39,7 +41,16 @@ public class StringParser {
             p.setSurname(matcher.group(2));
         }
 
-        System.out.printf("%s %s has bought %s of model %s", p.getName(), p.getSurname(), customerVehicle.getClass().toString(), customerVehicle.getName());
+        File shoppingHistory = new File("src\\Shopping_history.txt");
+
+        BufferedReader reader = new BufferedReader(new FileReader(shoppingHistory));
+        FileWriter fw = new FileWriter(shoppingHistory, true);
+        PrintWriter writer = new PrintWriter(fw);
+
+        writer.printf("%s %s %s has bought %s of model %s \n", System.currentTimeMillis(), p.getName(), p.getSurname(), customerVehicle.getClass(), customerVehicle.getName());
+        writer.close();
+
+        System.out.printf("%s %s has bought %s of model %s", p.getName(), p.getSurname(), customerVehicle.getClass(), customerVehicle.getName());
 
     }
 
